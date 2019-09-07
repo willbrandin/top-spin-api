@@ -3,7 +3,7 @@ const express = require('express'),
   auth = require('../middleware/auth'),
   matches = require('../controllers/matches');
 
-router.get('/', auth.isAuthorized, matches.getMatches);
-router.put('/', auth.isAuthorized, matches.addMatches);
+router.get('/', auth.authorizeUser, matches.getMatches);
+router.put('/', auth.authorizeUser, matches.addMatches);
 
 module.exports = router;
