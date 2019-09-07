@@ -2,16 +2,24 @@ const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 
 exports.signIn = (request, response) => {
-
   User.findOne({ email: request.body.email }).exec()
-  .then(user => {  
-    console.log(user);
-      
+  .then(user => {        
     if (user !== null) {
       signIn(user, request, response);
     } else {
       createUser(request, response);
     }
+  })
+  .catch(error => {
+    response.status(500).json(error);
+  })
+}
+
+exports.getUser = (request, response) => {
+  let userId = request.user.id;
+  User.findById(userId)
+  .then(user => {
+    response.status(200).json(user);
   })
   .catch(error => {
     response.status(500).json(error);
