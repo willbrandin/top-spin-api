@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let match = new Schema({
-  startDate: {
+  date: {
     type: Date,
     required: 'Event needs start date'
   },

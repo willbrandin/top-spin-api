@@ -21,8 +21,12 @@ exports.addMatches = (request, response) => {
   User.findById(userId)
   .then(user => {    
     let docMatches = matches.map(match => matchWithUser(user, match));     
-    docMatches.forEach(match => {      
-      savePromises.push(match.workout.save());
+    docMatches.forEach(match => {     
+      console.log(match);
+      
+      if (match.workout !== undefined) {
+        savePromises.push(match.workout.save());
+      }
       savePromises.push(match.save());
     });    
     return Promise.all(savePromises);
@@ -35,11 +39,17 @@ exports.addMatches = (request, response) => {
   })
 }
 
-const matchWithUser = (user, match) => {  
-  const workout = new Workout(match.workout);
+const matchWithUser = (user, match) => {
+  let workout;
+  if (match.workout !== undefined) {
+    workout = new Workout({
+      maxHeartRate: match.workout.maxHeartRate,
+      user
+    })
+  }
 
   return new Match({
-    startDate: match.startDate,
+    date: match.date,
     user: user,
     score: match.score,
     workout: workout
