@@ -9,10 +9,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const matchRoutes = require('./routes/matches'), 
-  userRoutes = require('./routes/users');
+const userRoutes = require('./routes/users');
   
-app.use('/api/matches', matchRoutes);
 app.use('/api/users', userRoutes);
 
 app.use((request, response, next) => {
