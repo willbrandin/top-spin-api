@@ -26,6 +26,19 @@ exports.getUser = (request, response) => {
   })
 }
 
+exports.updateUser = (request, response) => {
+  const updateQuery = {
+    email: request.body.email
+  }
+  User.findOneAndUpdate({id: request.params.id}, updateQuery, {new: true})
+  .then(user => {
+    response.status(200).json(user);
+  })
+  .catch(error => {
+    response.status(500).json(error);
+  })
+}
+
 const createUser = (request, response) => {
   let token;
   let user = {
