@@ -10,7 +10,7 @@ let workout = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  },
+  }
 });
 
 module.exports = mongoose.model('Workout', workout);
