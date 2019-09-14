@@ -6,6 +6,7 @@ const express = require('express'),
   users = require('../controllers/users');
 
 router.get('/:userId', auth.authorizeUser, users.getUser);
+router.put('/:userId', auth.authorizeUser, users.updateUser);
 router.post('/', users.signIn);
 
 router.use('/:userId/matches', matchRoutes);

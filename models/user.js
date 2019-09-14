@@ -9,7 +9,11 @@ let user = new Schema({
     required: true,
     unique: true
   },
-  password: {
+  name: {
+    type: String,
+    required: true
+  },
+  userCredential: {
     type: String,
     required: true
   },
@@ -19,27 +23,26 @@ let user = new Schema({
   }
 });
 
-user.pre('save', async function(next){
-  try {
-    if(!this.isModified('password')){
-      return next();
-    }
-    let hashedPassword = await bcrypt.hash(this.password, 10);
-    this.password = hashedPassword
-    return next();
-  } catch(err){
-    return next(err);
-  }
-});
+// user.pre('save', async function(next){
+//   try {
+//     if(!this.isModified('userCredential')){
+//       return next();
+//     }
+//     let hashedPassword = await bcrypt.hash(this.userCredential, 10);
+//     this.userCredential = hashedPassword
+//     return next();
+//   } catch(err){
+//     return next(err);
+//   }
+// });
 
-user.methods.comparePassword = async function(candidatePassword, next) {
-  try {
-    let isMatch = await bcrypt.compare(candidatePassword, this.password);    
-    return isMatch
-  } catch(err){
-    return next(err);
-  }
-}
-
+// user.methods.comparePassword = async function(candidatePassword, next) {
+//   try {
+//     let isMatch = await bcrypt.compare(candidatePassword, this.userCredential);    
+//     return isMatch
+//   } catch(err){
+//     return next(err);
+//   }
+// }
 
 module.exports = mongoose.model('User', user);
