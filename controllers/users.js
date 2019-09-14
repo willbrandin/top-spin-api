@@ -2,7 +2,12 @@ const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 
 exports.signIn = (request, response) => {
-  User.findOne({ email: request.body.email }).exec()
+  if (!request.body.userCredential) {
+    response.status(403).json({message: 'No user credential'})
+    return 
+  }
+  
+  User.findOne({ userCredential: request.body.userCredential }).exec()
   .then(user => {        
     if (user !== null) {
       signIn(user, request, response);
@@ -41,12 +46,14 @@ exports.updateUser = (request, response) => {
 
 const createUser = (request, response) => {
   let token;
-  let user = {
+  let user = new User ({
     email: request.body.email,
-    password: request.body.password,
+    name: request.body.name,
+    userCredential: request.body.userCredential,
     createdDate: new Date().toISOString()
-  }
-  User.create(user)
+  })
+  
+  user.save()
   .then(newUser => {
     const { id } = newUser
     token = jwt.sign({ id }, process.env.SECRET_KEY);
@@ -58,17 +65,7 @@ const createUser = (request, response) => {
 }
 
 const signIn = (user, request, response) => {  
-  user.comparePassword(request.body.password)
-  .then(didMatch => {    
-    if (didMatch) {
-      const { id } = user;
-      let token = jwt.sign({ id }, process.env.SECRET_KEY);
-      return response.status(200).json({user: user, token});
-    } else {
-      response.status(400).json({ message: "Invalid email and password" });
-    }
-  })
-  .catch(error => {
-    response.status(500).json(error);
-  })
+    const { id } = user;
+    let token = jwt.sign({ id }, process.env.SECRET_KEY);
+    return response.status(200).json({user: user, token});
 }
