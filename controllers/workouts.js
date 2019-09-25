@@ -1,4 +1,4 @@
-var { User, Workout } = require('../models');
+var { Workout } = require('../models');
 
 exports.getWorkouts = (request, response) => {
   const userId = request.params.userId;

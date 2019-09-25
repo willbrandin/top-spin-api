@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User, MatchSetting } = require('../models');
 const jwt = require('jsonwebtoken');
 
 exports.signIn = (request, response) => {
@@ -35,7 +35,7 @@ exports.updateUser = (request, response) => {
   const updateQuery = {
     email: request.body.email
   }
-  User.findOneAndUpdate({id: request.params.id}, updateQuery, {new: true})
+  User.findOneAndUpdate({id: requsadest.params.userId}, updateQuery, {new: true})
   .then(user => {
     response.status(200).json(user);
   })
@@ -45,7 +45,7 @@ exports.updateUser = (request, response) => {
 }
 
 const createUser = (request, response) => {
-  let token;
+  let token, createdUser;
   let user = new User ({
     email: request.body.email,
     name: request.body.name,
@@ -55,9 +55,17 @@ const createUser = (request, response) => {
   
   user.save()
   .then(newUser => {
-    const { id } = newUser
+    createdUser = newUser
+    let matchSetting = new MatchSetting({
+      user: user
+    })
+    
+    return matchSetting.save()
+  })
+  .then(settings => {
+    const { id } = createdUser
     token = jwt.sign({ id }, process.env.SECRET_KEY);
-    response.status(201).json({ user: newUser, token })
+    response.status(201).json({ user: createdUser, token })
   })
   .catch(error => {
     response.status(500).json(error);
