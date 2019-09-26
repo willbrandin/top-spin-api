@@ -9,9 +9,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const userRoutes = require('./routes/users');
+const userRoutes = require('./routes/users'),
+  gameRoutes = require('./routes/games'),
+  matchRoutes = require('./routes/matches');
   
 app.use('/api/users', userRoutes);
+app.use('/api/games', gameRoutes);
+app.use('/api/matches', matchRoutes);
 
 app.use((request, response, next) => {
   let error = new Error('Not Found');
