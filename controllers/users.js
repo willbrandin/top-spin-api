@@ -35,7 +35,7 @@ exports.updateUser = (request, response) => {
   const updateQuery = {
     email: request.body.email
   }
-  User.findOneAndUpdate({id: requsadest.params.userId}, updateQuery, {new: true})
+  User.findOneAndUpdate({id: request.user.id}, updateQuery, {new: true})
   .then(user => {
     response.status(200).json(user);
   })

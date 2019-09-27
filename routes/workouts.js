@@ -3,6 +3,6 @@ const express = require('express'),
   auth = require('../middleware/auth'),
   workouts = require('../controllers/workouts');
 
-router.get('/', auth.authorizeUser, workouts.getWorkouts);
+router.get('/', auth.isAuthorized, auth.isAuthenticated, workouts.getWorkouts);
 
 module.exports = router;

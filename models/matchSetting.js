@@ -25,7 +25,7 @@ let matchSetting = new Schema({
 })
 
 const isValidLimit = () => {
-  return limit == 21 || limit == 11 || limit == 7
+  return limit === 21 || limit === 11 || limit === 7
 }
 
 module.exports = mongoose.model('MatchSetting', matchSetting);
